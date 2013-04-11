@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <title>Spark API Documentation</title>
+    <meta charset='utf-8'>
+    <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+    <link href='api.css' rel='stylesheet'>
+    <link href='highlight-default.css' rel='stylesheet'>
+    <script src='//use.typekit.net/mov0hpt.js'></script>
+    <script>try{Typekit.load();}catch(e){}</script>
+    <script src='highlight.pack.js'></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <header>
+      <img alt='Spark' src='spark-horizontal.png'>
+      <nav>
+        <ul>
+          <li>
+            <a href='#intro'>Introduction</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <div class='container'>
+      <article>
+        <table>
+          <tbody>
+            <tr id='intro'>
+              <td>
+                <h1>Introduction</h1>
+                <p>
+                  The Spark API is currently in
+                  rapid development—things are changing fast!
+                  Responses are currently dummy data.
+                </p>
+                <ul>
+                  <li>
+                    HTTP GET requests retrieve data from a device
+                    without changing its state.
+                  </li>
+                  <li>
+                    HTTP POST requests send data to a device,
+                    usually changing its state in the process.
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  All data is in JSON format,
+                  whether sent by you or returned by the server.
+                  Notably, that means that whenever you send data,
+                  with a POST request for instance,
+                  you need to send a Content-Type header.
+                </p>
+              </td>
+              <td>
+                <pre><code>curl -H 'Content-Type: application/json' \&#x000A;     -d '{"message":"winning"}'          \&#x000A;     https://api.sprk.io/v1/devices/abcd1234abcd1234abcd1234</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h1>Authentication</h1>
+                <p>
+                  Right now there is no need to authenticate.
+                  Play with our dummy data unburdened by your weighty indentity!
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  All the following examples can be called
+                  for either devices or groups.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h1>Control a Device</h1>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  The simplest thing you can do with a Spark Core
+                  is to set one of the exposed pins high or low.
+                  This is like digitalWrite() in
+                  <a href='http://arduino.cc/en/Reference/DigitalWrite'>Arduino</a>
+                  default firmware, control pins
+                  or
+                  <a href='http://wiring.org.co/reference/digitalWrite_.html'>Wiring</a>,
+                  the framework Arduino was built on.
+                </p>
+                <p>
+                  There are 16 GPIO pins exposed,
+                  8 digital (D0–D7) and 8 analog (A0–A7).
+                  This call may be performed on any of these 16 pins.
+                  The value argument must be either HIGH or LOW.
+                </p>
+              </td>
+              <td>
+                POST /v1/devices/:id
+                <pre><code>{&#x000A;  "pin"   : "D0",&#x000A;  "value" : "HIGH"&#x000A;}</code>
+                <code>curl -H 'Content-Type: application/json' \&#x000A;     -d '{"pin":"D1","value":"LOW"}'     \&#x000A;     https://api.sprk.io/v1/devices/abcd1234abcd1234abcd1234</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                custom messages
+              </td>
+              <td>
+                POST /v1/devices/:id
+                <pre><code>{&#x000A;  "message" : "set_color #1180FF"&#x000A;}</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                SSE
+              </td>
+              <td>
+                GET /v1/devices/:id/events
+              </td>
+            </tr>
+            <tr>
+              <td>
+                callbacks to your server
+              </td>
+            </tr>
+            <tr>
+              <td>
+                one time
+              </td>
+              <td>
+                POST /v1/devices/:id
+                <pre><code>{&#x000A;  "callback" : "pre-registered_callback_name"&#x000A;}</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                periodic
+              </td>
+              <td>
+                POST /v1/devices/:id
+                <pre><code>{&#x000A;  "callback" : "pre-registered_callback_name",&#x000A;  "period"   : 1&#x000A;  // more info either provided or in response&#x000A;}&#x000A;</code></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </div>
+    <footer>
+      <img src='spark-powered-mark.png'>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+!!!
+%html{ lang: 'en' }
+  %head
+    %title Spark API Documentation
+    %meta{ charset: 'utf-8' }
+    %meta{ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }
+    %link{ rel: 'stylesheet', href: 'api.css' }
+    %link{ rel: 'stylesheet', href: 'highlight-default.css' }
+    %script{ src: '//use.typekit.net/mov0hpt.js' }
+    %script try{Typekit.load();}catch(e){}
+    %script{ src: 'highlight.pack.js' }
+    %script hljs.initHighlightingOnLoad();
+  %body
+    %header
+      %img{ src: 'spark-horizontal.png', alt: 'Spark' }
+      %nav
+        %ul
+          %li
+            %a{ href: '#intro' } Introduction
+    .container
+      %article
+        %table
+          %tbody
+            %tr#intro
+              %td
+                %h1 Introduction
+                %p
+                  The Spark API is currently in
+                  rapid development—things are changing fast!
+                  Responses are currently dummy data.
+                %ul
+                  %li
+                    HTTP GET requests retrieve data from a device
+                    without changing its state.
+                  %li
+                    HTTP POST requests send data to a device,
+                    usually changing its state in the process.
+            %tr
+              %td
+                %p
+                  All data is in JSON format,
+                  whether sent by you or returned by the server.
+                  Notably, that means that whenever you send data,
+                  with a POST request for instance,
+                  you need to send a Content-Type header.
+              %td
+                %pre
+                  %code
+                    :preserve
+                      curl -H 'Content-Type: application/json' \
+                           -d '{"message":"winning"}'          \
+                           https://api.sprk.io/v1/devices/abcd1234abcd1234abcd1234
+            %tr
+              %td
+                %h1 Authentication
+                %p
+                  Right now there is no need to authenticate.
+                  Play with our dummy data unburdened by your weighty indentity!
+            %tr
+              %td
+                %p
+                  All the following examples can be called
+                  for either devices or groups.
+            %tr
+              %td
+                %h1 Control a Device
+            %tr
+              %td
+                %p
+                  The simplest thing you can do with a Spark Core
+                  is to set one of the exposed pins high or low.
+                  This is like digitalWrite() in
+                  %a{ href: 'http://arduino.cc/en/Reference/DigitalWrite' } Arduino
+                  default firmware, control pins
+                  or
+                  <a href='http://wiring.org.co/reference/digitalWrite_.html'>Wiring</a>,
+                  the framework Arduino was built on.
+                %p
+                  There are 16 GPIO pins exposed,
+                  8 digital (D0–D7) and 8 analog (A0–A7).
+                  This call may be performed on any of these 16 pins.
+                  The value argument must be either HIGH or LOW.
+              %td
+                POST /v1/devices/:id
+                %pre
+                  %code
+                    :preserve
+                      {
+                        "pin"   : "D0",
+                        "value" : "HIGH"
+                      }
+                  %code
+                    :preserve
+                      curl -H 'Content-Type: application/json' \
+                           -d '{"pin":"D1","value":"LOW"}'     \
+                           https://api.sprk.io/v1/devices/abcd1234abcd1234abcd1234
+            %tr
+              %td
+                custom messages
+              %td
+                POST /v1/devices/:id
+                %pre
+                  %code
+                    :preserve
+                      {
+                        "message" : "set_color #1180FF"
+                      }
+            %tr
+              %td
+                SSE
+              %td
+                GET /v1/devices/:id/events
+            %tr
+              %td
+                callbacks to your server
+            %tr
+              %td
+                one time
+              %td
+                POST /v1/devices/:id
+                %pre
+                  %code
+                    :preserve
+                      {
+                        "callback" : "pre-registered_callback_name"
+                      }
+            %tr
+              %td
+                periodic
+              %td
+                POST /v1/devices/:id
+                %pre
+                  %code
+                    :preserve
+                      {
+                        "callback" : "pre-registered_callback_name",
+                        "period"   : 1
+                        // more info either provided or in response
+                      }
+
+    %footer
+      %img{ src: 'spark-powered-mark.png' }
