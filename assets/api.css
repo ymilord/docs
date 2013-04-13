@@ -60,6 +60,17 @@ footer img {
   height: 20px;
 }
 
+h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+h2 {
+  font-family: inconsolata, monospace;
+  font-size: 18px;
+  font-weight: 300;
+}
+
 table {
   border-spacing: 0;
 }
@@ -68,7 +79,7 @@ td {
   vertical-align: top;
   width: 100%;
   padding: 0 20px;
-  font-family: inconsolata, sans-serif;
+  font-family: inconsolata, monospace;
 }
 
 td:first-child {

@@ -35,21 +35,58 @@
                   %li
                     HTTP POST requests send data to a device,
                     usually changing its state in the process.
+                %p
+                  If you already know the other common HTTP verbs,
+                  then you know what they do, if not, don't worry,
+                  you'll understand in a minute—just keep reading.
+            %tr
+              %td
+                %h1 Response Format
             %tr
               %td
                 %p
-                  All data is in JSON format,
-                  whether sent by you or returned by the server.
-                  Notably, that means that whenever you send data,
-                  with a POST request for instance,
-                  you need to send a Content-Type header.
+                  Server responses are in JSON and always contain the key "ok".
+                  The value of the "ok" key is boolean: true or false.
+              %td
+                %pre
+                  %code
+                    { "ok": true }
+            %tr
+              %td
+                %p
+                  If ok is false, there will also be an "errors" key.
+                  The value of "errors" is an array of error messages.
               %td
                 %pre
                   %code
                     :preserve
-                      curl -H 'Content-Type: application/json' \
-                           -d '{"message":"winning"}'          \
-                           https://api.sprk.io/v1/devices/abcd1234abcd1234abcd1234
+                      {
+                        "ok": false,
+                        "errors": [
+                          "Bad pin: lambswool",
+                          "Bad value: palm tree"
+                        ]
+                      }
+            %tr
+              %td
+                %p
+                  You may send request data either web form encoded or in JSON.
+                  With curl's -d flag, the default encoding is
+                  application/x-www-form-urlencoded,
+                  but some data structures are hard to represent that way.
+                  If you run into this barrier when sending data to a device
+                  (or if, like us, you prefer the robustness and clarity of JSON)
+                  just set the Content-Type header for your request to
+                  application/json.
+              %td
+                %pre
+                  %code.bash
+                    :preserve
+                      curl https://api.sprk.io/v1/devices/elroy -d message=winning
+
+                      curl https://api.sprk.io/v1/devices/elroy \
+                           -d '{"message":"winning"}'           \
+                           -H 'Content-Type: application/json'
             %tr
               %td
                 %h1 Authentication
@@ -58,12 +95,8 @@
                   Play with our dummy data unburdened by your weighty indentity!
             %tr
               %td
-                %p
-                  All the following examples can be called
-                  for either devices or groups.
-            %tr
-              %td
                 %h1 Control a Device
+                %h2 POST /v1/devices/:id (pin, value)
             %tr
               %td
                 %p
@@ -80,43 +113,58 @@
                   This call may be performed on any of these 16 pins.
                   The value argument must be either HIGH or LOW.
               %td
-                POST /v1/devices/:id
                 %pre
-                  %code
-                    :preserve
-                      {
-                        "pin"   : "D0",
-                        "value" : "HIGH"
-                      }
-                  %code
-                    :preserve
-                      curl -H 'Content-Type: application/json' \
-                           -d '{"pin":"D1","value":"LOW"}'     \
-                           https://api.sprk.io/v1/devices/abcd1234abcd1234abcd1234
+                  %code.bash
+                    curl https://api.sprk.io/v1/devices/elroy -d pin=D0 -d value=HIGH
             %tr
               %td
-                custom messages
+                %h1 Custom Messages
+                %h2 POST /v1/devices/:id (message)
+            %tr
               %td
-                POST /v1/devices/:id
+                %p
+                  If you implement a user-defined function in your embedded code,
+                  you can trigger it from the api by including the "message"
+                  key in your POST data.
+                  The value of the "message" key will be passed as the string
+                  argument to your function.
+              %td
                 %pre
-                  %code
+                  %code.bash
                     :preserve
-                      {
-                        "message" : "set_color #1180FF"
-                      }
+                      curl https://api.sprk.io/v1/devices/elroy \
+                           -d "message=set_color #1180FF"
             %tr
               %td
-                SSE
-              %td
-                GET /v1/devices/:id/events
+                %h1 Server-Sent Events (SSEs)
+                %h2 GET /v1/devices/:id/events
             %tr
               %td
-                callbacks to your server
+                %p
+                  Imagine a connected toy.
+                  We'll call it: box.
+                  This toy has sensors, like an accelerometer,
+                  so it knows which side is facing up.
+                %p
+                  The sides are labeled 1, 2, 3, 4, 5, 6.
+                  When writing an awesome app for parents to interact with
+                  kids from a distance while the kids are playing with the box,
+                  the parents want to know which side is up at all times.
+                %p
+                  This API call would open a stream of
+                  <a href="https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events">server-sent events</a>.
+              %td
+                %pre
+                  %code.bash
+                    curl https://api.sprk.io/v1/devices/elroy/events
+            %tr
+              %td
+                %h1 Callbacks to Your Server
+                %h2 POST /v1/devices/:id (callback)
             %tr
               %td
                 one time
               %td
-                POST /v1/devices/:id
                 %pre
                   %code
                     :preserve
@@ -127,7 +175,6 @@
               %td
                 periodic
               %td
-                POST /v1/devices/:id
                 %pre
                   %code
                     :preserve
@@ -136,6 +183,57 @@
                         "period"   : 1
                         // more info either provided or in response
                       }
+            %tr
+              %td
+                %h1 Groups
+                %p
+                  Every example above is for a single device, but
+                  all the same calls apply to groups.
+                  You create, read, update, and delete (CRUD) groups
+                  in the standard RESTful way with the HTTP verbs
+                  POST, GET, PATCH, and DELETE.
+            %tr
+              %td
+                %p
+                  Create a group of two devices.
+                  Remember, by using curl's -d flag,
+                  you're automatically sending a POST request,
+                  though if you want to include -X POST it works fine.
+              %td
+                %pre
+                  %code.bash
+                    :preserve
+                      curl https://api.sprk.io/v1/groups       \
+                           -H 'Content-Type: application/json' \
+                           -d '{
+                                 "name    : "the_boyz",
+                                 "devices : ["elroy", "george"]
+                               }'
+            %tr
+              %td
+                %p List the devices in a group.
+              %td
+                %pre
+                  %code.bash
+                    curl https://api.sprk.io/v1/groups/the_boyz
+            %tr
+              %td
+                %p Change which devices are in a group.
+              %td
+                %pre
+                  %code.bash
+                    :preserve
+                      curl https://api.sprk.io/v1/groups/the_boyz \
+                           -H 'Content-Type: application/json'    \
+                           -X PATCH                               \
+                           -d '{ "devices": ["elroy", "george", "astro"] }'
+            %tr
+              %td
+                %p Delete a group.
+              %td
+                %pre
+                  %code.bash
+                    curl https://api.sprk.io/v1/groups/the_boyz -X DELETE
 
     %footer
       %img{ src: 'assets/spark-powered-mark.png' }

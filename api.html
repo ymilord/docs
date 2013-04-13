@@ -44,20 +44,55 @@
                     usually changing its state in the process.
                   </li>
                 </ul>
+                <p>
+                  If you already know the other common HTTP verbs,
+                  then you know what they do, if not, don't worry,
+                  you'll understand in a minute—just keep reading.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h1>Response Format</h1>
               </td>
             </tr>
             <tr>
               <td>
                 <p>
-                  All data is in JSON format,
-                  whether sent by you or returned by the server.
-                  Notably, that means that whenever you send data,
-                  with a POST request for instance,
-                  you need to send a Content-Type header.
+                  Server responses are in JSON and always contain the key "ok".
+                  The value of the "ok" key is boolean: true or false.
                 </p>
               </td>
               <td>
-                <pre><code>curl -H 'Content-Type: application/json' \&#x000A;     -d '{"message":"winning"}'          \&#x000A;     https://api.sprk.io/v1/devices/abcd1234abcd1234abcd1234</code></pre>
+                <pre><code>{ "ok": true }</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  If ok is false, there will also be an "errors" key.
+                  The value of "errors" is an array of error messages.
+                </p>
+              </td>
+              <td>
+                <pre><code>{&#x000A;  "ok": false,&#x000A;  "errors": [&#x000A;    "Bad pin: lambswool",&#x000A;    "Bad value: palm tree"&#x000A;  ]&#x000A;}</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  You may send request data either web form encoded or in JSON.
+                  With curl's -d flag, the default encoding is
+                  application/x-www-form-urlencoded,
+                  but some data structures are hard to represent that way.
+                  If you run into this barrier when sending data to a device
+                  (or if, like us, you prefer the robustness and clarity of JSON)
+                  just set the Content-Type header for your request to
+                  application/json.
+                </p>
+              </td>
+              <td>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/devices/elroy -d message=winning&#x000A;&#x000A;curl https://api.sprk.io/v1/devices/elroy \&#x000A;     -d '{"message":"winning"}'           \&#x000A;     -H 'Content-Type: application/json'</code></pre>
               </td>
             </tr>
             <tr>
@@ -71,15 +106,8 @@
             </tr>
             <tr>
               <td>
-                <p>
-                  All the following examples can be called
-                  for either devices or groups.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>
                 <h1>Control a Device</h1>
+                <h2>POST /v1/devices/:id (pin, value)</h2>
               </td>
             </tr>
             <tr>
@@ -101,31 +129,62 @@
                 </p>
               </td>
               <td>
-                POST /v1/devices/:id
-                <pre><code>{&#x000A;  "pin"   : "D0",&#x000A;  "value" : "HIGH"&#x000A;}</code>
-                <code>curl -H 'Content-Type: application/json' \&#x000A;     -d '{"pin":"D1","value":"LOW"}'     \&#x000A;     https://api.sprk.io/v1/devices/abcd1234abcd1234abcd1234</code></pre>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/devices/elroy -d pin=D0 -d value=HIGH</code></pre>
               </td>
             </tr>
             <tr>
               <td>
-                custom messages
-              </td>
-              <td>
-                POST /v1/devices/:id
-                <pre><code>{&#x000A;  "message" : "set_color #1180FF"&#x000A;}</code></pre>
+                <h1>Custom Messages</h1>
+                <h2>POST /v1/devices/:id (message)</h2>
               </td>
             </tr>
             <tr>
               <td>
-                SSE
+                <p>
+                  If you implement a user-defined function in your embedded code,
+                  you can trigger it from the api by including the "message"
+                  key in your POST data.
+                  The value of the "message" key will be passed as the string
+                  argument to your function.
+                </p>
               </td>
               <td>
-                GET /v1/devices/:id/events
+                <pre><code class='bash'>curl https://api.sprk.io/v1/devices/elroy \&#x000A;     -d "message=set_color #1180FF"</code></pre>
               </td>
             </tr>
             <tr>
               <td>
-                callbacks to your server
+                <h1>Server-Sent Events (SSEs)</h1>
+                <h2>GET /v1/devices/:id/events</h2>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  Imagine a connected toy.
+                  We'll call it: box.
+                  This toy has sensors, like an accelerometer,
+                  so it knows which side is facing up.
+                </p>
+                <p>
+                  The sides are labeled 1, 2, 3, 4, 5, 6.
+                  When writing an awesome app for parents to interact with
+                  kids from a distance while the kids are playing with the box,
+                  the parents want to know which side is up at all times.
+                </p>
+                <p>
+                  This API call would open a stream of
+                  <a href="https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events">server-sent events</a>.
+                </p>
+              </td>
+              <td>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/devices/elroy/events</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h1>Callbacks to Your Server</h1>
+                <h2>POST /v1/devices/:id (callback)</h2>
               </td>
             </tr>
             <tr>
@@ -133,7 +192,6 @@
                 one time
               </td>
               <td>
-                POST /v1/devices/:id
                 <pre><code>{&#x000A;  "callback" : "pre-registered_callback_name"&#x000A;}</code></pre>
               </td>
             </tr>
@@ -142,8 +200,56 @@
                 periodic
               </td>
               <td>
-                POST /v1/devices/:id
-                <pre><code>{&#x000A;  "callback" : "pre-registered_callback_name",&#x000A;  "period"   : 1&#x000A;  // more info either provided or in response&#x000A;}&#x000A;</code></pre>
+                <pre><code>{&#x000A;  "callback" : "pre-registered_callback_name",&#x000A;  "period"   : 1&#x000A;  // more info either provided or in response&#x000A;}</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h1>Groups</h1>
+                <p>
+                  Every example above is for a single device, but
+                  all the same calls apply to groups.
+                  You create, read, update, and delete (CRUD) groups
+                  in the standard RESTful way with the HTTP verbs
+                  POST, GET, PATCH, and DELETE.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  Create a group of two devices.
+                  Remember, by using curl's -d flag,
+                  you're automatically sending a POST request,
+                  though if you want to include -X POST it works fine.
+                </p>
+              </td>
+              <td>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/groups       \&#x000A;     -H 'Content-Type: application/json' \&#x000A;     -d '{&#x000A;           "name    : "the_boyz",&#x000A;           "devices : ["elroy", "george"]&#x000A;         }'</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>List the devices in a group.</p>
+              </td>
+              <td>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/groups/the_boyz</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Change which devices are in a group.</p>
+              </td>
+              <td>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/groups/the_boyz \&#x000A;     -H 'Content-Type: application/json'    \&#x000A;     -X PATCH                               \&#x000A;     -d '{ "devices": ["elroy", "george", "astro"] }'</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Delete a group.</p>
+              </td>
+              <td>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/groups/the_boyz -X DELETE</code></pre>
               </td>
             </tr>
           </tbody>
