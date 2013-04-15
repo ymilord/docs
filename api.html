@@ -184,24 +184,44 @@
             <tr>
               <td>
                 <p>
+                  Open a stream of
+                  <a href="https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events">server-sent events</a>.
+                  The event names and their data will be defined by the
+                  particular device you're interacting with.
+                </p>
+                <p>
                   Imagine a connected toy.
                   We'll call it: box.
                   This toy has sensors, like an accelerometer,
                   so it knows which side is facing up.
+                  The sides are labeled 1, 2, 3, 4, 5, 6.
                 </p>
                 <p>
-                  The sides are labeled 1, 2, 3, 4, 5, 6.
-                  When writing an awesome app for parents to interact with
+                  When writing an awesome app to allow parents to interact with
                   kids from a distance while the kids are playing with the box,
                   the parents want to know which side is up at all times.
                 </p>
                 <p>
-                  This API call would open a stream of
-                  <a href="https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events">server-sent events</a>.
+                  Dad opens his box app, which makes this API call to
+                  open an event stream.  The connection is kept alive
+                  and the app UI updates immediately anytime the box
+                  changes orientation.
                 </p>
               </td>
               <td>
-                <pre><code class='bash'>curl https://api.sprk.io/v1/devices/elroy/events</code></pre>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/devices/elroy_box/events</code></pre>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  Here's what the event stream received by the app might look like.
+                  The app should ignore those extra colons.
+                  They're comments, just used as keep-alive signals.
+                </p>
+              </td>
+              <td>
+                <pre><code class='bash'>event: orientation&#x000A;data: 6&#x000A;&#x000A;:&#x000A;:&#x000A;event: orientation&#x000A;data: 1&#x000A;&#x000A;:&#x000A;event: orientation&#x000A;data: 2</code></pre>
               </td>
             </tr>
             <tr>
