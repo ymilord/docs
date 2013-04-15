@@ -27,13 +27,13 @@ header {
   margin: 0 40px;
   border-color: #ffc988;
   border-width: 0 1px 1px 1px;
-  padding: 6px 8px;
+  padding: 2px 8px;
   background-color: #ffe4c4;
-  border-radius: 0 0 4px 4px;
+  border-radius: 0 0 5px 5px;
 }
 
 header img {
-  height: 40px;
+  height: 32px;
 }
 
 nav {

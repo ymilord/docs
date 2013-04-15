@@ -14,13 +14,6 @@
   <body>
     <header>
       <img alt='Spark' src='assets/spark-horizontal.png'>
-      <nav>
-        <ul>
-          <li>
-            <a href='#intro'>Introduction</a>
-          </li>
-        </ul>
-      </nav>
     </header>
     <div class='container'>
       <article>
@@ -211,7 +204,7 @@
                   all the same calls apply to groups.
                   You create, read, update, and delete (CRUD) groups
                   in the standard RESTful way with the HTTP verbs
-                  POST, GET, PATCH, and DELETE.
+                  POST, GET, PUT, and DELETE.
                 </p>
               </td>
             </tr>
@@ -241,7 +234,7 @@
                 <p>Change which devices are in a group.</p>
               </td>
               <td>
-                <pre><code class='bash'>curl https://api.sprk.io/v1/groups/the_boyz \&#x000A;     -H 'Content-Type: application/json'    \&#x000A;     -X PATCH                               \&#x000A;     -d '{ "devices": ["elroy", "george", "astro"] }'</code></pre>
+                <pre><code class='bash'>curl https://api.sprk.io/v1/groups/the_boyz \&#x000A;     -H 'Content-Type: application/json'    \&#x000A;     -X PUT                                 \&#x000A;     -d '{ "devices": ["elroy", "george", "astro"] }'</code></pre>
               </td>
             </tr>
             <tr>

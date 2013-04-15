@@ -13,10 +13,11 @@
   %body
     %header
       %img{ src: 'assets/spark-horizontal.png', alt: 'Spark' }
-      %nav
-        %ul
-          %li
-            %a{ href: '#intro' } Introduction
+      -#
+        %nav
+          %ul
+            %li
+              %a{ href: '#intro' } Introduction
     .container
       %article
         %table
@@ -191,7 +192,7 @@
                   all the same calls apply to groups.
                   You create, read, update, and delete (CRUD) groups
                   in the standard RESTful way with the HTTP verbs
-                  POST, GET, PATCH, and DELETE.
+                  POST, GET, PUT, and DELETE.
             %tr
               %td
                 %p
@@ -225,7 +226,7 @@
                     :preserve
                       curl https://api.sprk.io/v1/groups/the_boyz \
                            -H 'Content-Type: application/json'    \
-                           -X PATCH                               \
+                           -X PUT                                 \
                            -d '{ "devices": ["elroy", "george", "astro"] }'
             %tr
               %td
