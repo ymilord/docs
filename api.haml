@@ -22,7 +22,7 @@
       %article
         %table
           %tbody
-            %tr#intro
+            %tr
               %td
                 %h1 Introduction
                 %p
@@ -40,6 +40,16 @@
                   If you already know the other common HTTP verbs,
                   then you know what they do, if not, don't worry,
                   you'll understand in a minute—just keep reading.
+            %tr
+              %td
+                %h1 Endpoints
+                %p All Spark API URLs start with
+                %p
+                  %code https://api.sprk.io/v1
+                %p So that means:
+                %ul
+                  %li you always have to use TLS—https: not http:
+                  %li and the domain name is api.sprk.io.
             %tr
               %td
                 %h1 Response Format
