@@ -78,14 +78,17 @@
                   With curl's -d flag, the default encoding is
                   application/x-www-form-urlencoded,
                   but some data structures are hard to represent that way.
-                  If you run into this barrier when sending data to a device
+                </p>
+                <p>
+                  If you are sending arrays or deeply nested structures
+                  and get frustrated with web form encoding
                   (or if, like us, you prefer the robustness and clarity of JSON)
                   just set the Content-Type header for your request to
                   application/json.
                 </p>
               </td>
               <td>
-                <pre><code class='bash'>curl https://api.sprk.io/v1/devices/elroy -d message=winning&#x000A;&#x000A;curl https://api.sprk.io/v1/devices/elroy \&#x000A;     -d '{"message":"winning"}'           \&#x000A;     -H 'Content-Type: application/json'</code></pre>
+                <pre><code class='bash'># web form encoded, short &amp; sweet&#x000A;curl https://api.sprk.io/v1/devices/elroy -d message=winning&#x000A;&#x000A;# same thing, but sending JSON&#x000A;curl https://api.sprk.io/v1/devices/elroy \&#x000A;     -d '{"message":"winning"}'           \&#x000A;     -H 'Content-Type: application/json'</code></pre>
               </td>
             </tr>
             <tr>
