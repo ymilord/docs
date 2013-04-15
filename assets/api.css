@@ -84,6 +84,11 @@ td:first-child {
   font-family: proxima-nova, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+td:first-child code {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
 td > pre > code {
   padding: 0;
 }

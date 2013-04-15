@@ -111,7 +111,9 @@
                 <p>
                   The simplest thing you can do with a Spark Core
                   is to set one of the exposed pins high or low.
-                  This is like digitalWrite() in
+                  This is like
+                  <code>digitalWrite()</code>
+                  in
                   <a href='http://arduino.cc/en/Reference/DigitalWrite'>Arduino</a>
                   or
                   <a href='http://wiring.org.co/reference/digitalWrite_.html'>Wiring</a>
@@ -137,11 +139,22 @@
             <tr>
               <td>
                 <p>
-                  If you implement a user-defined function in your embedded code,
-                  you can trigger it from the api by including the "message"
-                  key in your POST data.
+                  If you implement a function called
+                  <code>userFunction()</code>
+                  in your embedded code, you can trigger it from the API
+                  by including the "message" key in your POST data.
                   The value of the "message" key will be passed as the string
                   argument to your function.
+                </p>
+                <p>
+                  Keep messages short.
+                  The server will reject them if they're much longer than a tweet.
+                </p>
+                <p>
+                  <em>
+                    The syntax for custom messages will change slightly
+                    to be even easier very soon!
+                  </em>
                 </p>
               </td>
               <td>
