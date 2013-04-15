@@ -227,23 +227,36 @@
             <tr>
               <td>
                 <h1>Callbacks to Your Server</h1>
-                <h2>POST /v1/devices/:id (callback)</h2>
               </td>
             </tr>
             <tr>
               <td>
-                one time
+                <p>
+                  Another way to access device data/events
+                  is for the Core to trigger an HTTP callback.
+                  Example time.
+                </p>
+                <p>
+                  You own a pizza shop.
+                  Your customers want a big, red button they can just
+                  smack to automatically order a pizza for delivery.
+                  So, you add a
+                  <code>POST /order</code>
+                  route to your website, and you register it as a callback
+                  that your Spark-powered pizza button can trigger.
+                </p>
+                <p>
+                  Now, in the pizza button embedded code you write
+                  <code>userCallback("pizza");</code>
+                  to run when the button is smacked,
+                  which tells the Spark servers to perform the pizza callback!
+                </p>
+                <p>
+                  This documentation's making me hungry.
+                </p>
               </td>
               <td>
-                <pre><code>{&#x000A;  "callback" : "pre-registered_callback_name"&#x000A;}</code></pre>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                periodic
-              </td>
-              <td>
-                <pre><code>{&#x000A;  "callback" : "pre-registered_callback_name",&#x000A;  "period"   : 1&#x000A;  // more info either provided or in response&#x000A;}</code></pre>
+                <pre><code class='bash'># on the device...&#x000A;userCallback("pizza");&#x000A;&#x000A;# Spark server whispers to crazyawesomepizza.com server...&#x000A;POST /order HTTP/1.1&#x000A;Host: crazyawesomepizza.com</code></pre>
               </td>
             </tr>
             <tr>

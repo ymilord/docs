@@ -213,29 +213,37 @@
             %tr
               %td
                 %h1 Callbacks to Your Server
-                %h2 POST /v1/devices/:id (callback)
             %tr
               %td
-                one time
+                %p
+                  Another way to access device data/events
+                  is for the Core to trigger an HTTP callback.
+                  Example time.
+                %p
+                  You own a pizza shop.
+                  Your customers want a big, red button they can just
+                  smack to automatically order a pizza for delivery.
+                  So, you add a
+                  %code POST /order
+                  route to your website, and you register it as a callback
+                  that your Spark-powered pizza button can trigger.
+                %p
+                  Now, in the pizza button embedded code you write
+                  %code userCallback("pizza");
+                  to run when the button is smacked,
+                  which tells the Spark servers to perform the pizza callback!
+                %p
+                  This documentation's making me hungry.
               %td
                 %pre
-                  %code
+                  %code.bash
                     :preserve
-                      {
-                        "callback" : "pre-registered_callback_name"
-                      }
-            %tr
-              %td
-                periodic
-              %td
-                %pre
-                  %code
-                    :preserve
-                      {
-                        "callback" : "pre-registered_callback_name",
-                        "period"   : 1
-                        // more info either provided or in response
-                      }
+                      # on the device...
+                      userCallback("pizza");
+
+                      # Spark server whispers to crazyawesomepizza.com server...
+                      POST /order HTTP/1.1
+                      Host: crazyawesomepizza.com
             %tr
               %td
                 %h1 Groups
