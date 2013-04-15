@@ -100,8 +100,8 @@
                   Play with our dummy data unburdened by your weighty indentity!
             %tr
               %td
-                %h1 Control a Device
-                %h2 POST /v1/devices/:id (pin, value)
+                %h1 Set Device Pins High/Low
+                %h2 POST /v1/devices/:id (pin, level)
             %tr
               %td
                 %p
@@ -110,17 +110,17 @@
                   This is like digitalWrite() in
                   %a{ href: 'http://arduino.cc/en/Reference/DigitalWrite' } Arduino
                   or
-                  <a href='http://wiring.org.co/reference/digitalWrite_.html'>Wiring</a>,
-                  the framework Arduino was built on.
+                  %a{ href: 'http://wiring.org.co/reference/digitalWrite_.html' } Wiring
+                  (the framework Arduino was built on).
                 %p
-                  There are 16 GPIO pins exposed,
+                  There are 16 GPIO pins exposed on a Spark Core,
                   8 digital (D0–D7) and 8 analog (A0–A7).
                   This call may be performed on any of these 16 pins.
-                  The value argument must be either HIGH or LOW.
+                  The level argument must be either HIGH or LOW.
               %td
                 %pre
                   %code.bash
-                    curl https://api.sprk.io/v1/devices/elroy -d pin=D0 -d value=HIGH
+                    curl https://api.sprk.io/v1/devices/elroy -d pin=D0 -d level=HIGH
             %tr
               %td
                 %h1 Custom Messages
