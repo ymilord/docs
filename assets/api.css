@@ -56,11 +56,16 @@ footer img {
 }
 
 h1 {
-  font-size: 22px;
+  font-size: 32px;
   font-weight: 700;
 }
 
 h2 {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+h3 {
   font-family: inconsolata, monospace;
   font-size: 18px;
   font-weight: 300;

@@ -42,7 +42,7 @@
                   you'll understand in a minute—just keep reading.
             %tr
               %td
-                %h1 Endpoints
+                %h2 Endpoints
                 %p All Spark API URLs start with
                 %p
                   %code https://api.sprk.io/v1
@@ -52,7 +52,7 @@
                   %li and the domain name is api.sprk.io.
             %tr
               %td
-                %h1 Response Format
+                %h2 Response Format
             %tr
               %td
                 %p
@@ -104,14 +104,15 @@
                            -H 'Content-Type: application/json'
             %tr
               %td
-                %h1 Authentication
+                %h2 Authentication
                 %p
                   Right now there is no need to authenticate.
                   Play with our dummy data unburdened by your weighty indentity!
             %tr
               %td
-                %h1 Set Device Pins High/Low
-                %h2 POST /v1/devices/:id (pin, level)
+                %h1 Control a Device
+                %h2 Set Pins High/Low
+                %h3 POST /v1/devices/:id (pin, level)
             %tr
               %td
                 %p
@@ -135,10 +136,14 @@
                     curl https://api.sprk.io/v1/devices/elroy -d pin=D0 -d level=HIGH
             %tr
               %td
-                %h1 Custom Messages
-                %h2 POST /v1/devices/:id (message)
+                %h2 Custom Messages
+                %h3 POST /v1/devices/:id (message)
             %tr
               %td
+                %p
+                  Often you need to do something a bit more complex than just
+                  setting a pin high or low.  That's when you should write
+                  your own Arduino-compatible embedded code.
                 %p
                   If you implement a function called
                   %code userFunction()
@@ -161,8 +166,13 @@
                            -d "message=set_color #1180FF"
             %tr
               %td
-                %h1 Server-Sent Events (SSEs)
-                %h2 GET /v1/devices/:id/events
+                %h1 Receive Data From a Device
+                %p
+                  But what about pushing data out from the device?
+                  For many situations, the electronics will sense something
+                  that triggers a message to the outside world.
+                %h2 Server-Sent Events (SSEs)
+                %h3 GET /v1/devices/:id/events
             %tr
               %td
                 %p
@@ -212,7 +222,7 @@
                       data: 2
             %tr
               %td
-                %h1 Callbacks to Your Server
+                %h2 Callbacks to Your Server
             %tr
               %td
                 %p
